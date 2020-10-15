@@ -160,6 +160,11 @@ class Installer
                 }
 
                 $response = $this->terminal->ask('File path to read for ' . $attribute);
+                if (empty($response)) {
+                    $attributes[$type][$attribute] = '';
+                    continue;
+                }
+
                 if (file_exists($response) && is_readable($response) && is_file($response)) {
                     $response = file_get_contents($response);
                 } else {
