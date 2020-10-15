@@ -148,6 +148,9 @@ class Installer
                 }
 
                 $response = $this->terminal->ask($attribute);
+                if (empty($response)) {
+                    $response = '';
+                }
                 $attributes[$type][$attribute] = ($type == 'standard') ?
                     $response : '= decrypt("'.$this->crypt->encrypt($response).'")';
             }
