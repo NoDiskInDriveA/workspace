@@ -71,7 +71,7 @@ EOD
         );
 
         $contents = file_get_contents('workspace.yml');
-        $encrypted = trim(run('secret file encrypt "workspace.yml"'));
+        $encrypted = trim(run('secret encrypt-file "workspace.yml"'));
         $decrypted = trim(run('secret decrypt "'.$encrypted.'"'));
 
         $this->assertTrue($encrypted != $contents);
