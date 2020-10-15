@@ -135,8 +135,10 @@ class Installer
     private function ensureRequiredAttributesArePresent(array $required)
     {
         $attributes = [
-            'standard' => [],
-            'secret'   => []
+            'standard'      => [],
+            'standard_file' => [],
+            'secret'        => [],
+            'secret_file'   => []
         ];
 
         foreach (['standard', 'secret'] as $type) {
@@ -149,12 +151,25 @@ class Installer
             }
         }
 
-        if (!empty($attributes['standard'])) {
-            $this->writeOutAttributes('workspace.yml', $attributes['standard']);
+        foreach (['standard_file', 'secret_file'] as $type) {
+            foreach ($required[$type] ?? [] as $attribute) {
+                if (!isset($this->attributes[$attribute])) {
+                    $response = $this->terminal->ask('File path to read for ' . $attribute);
+                    if (file_exists($response) && is_readable($response) && is_file($response)) {
+                        $response = file_get_contents($response);
+                    } else {
+                        throw new Exception('Could not read file "' . $response . '"');
+                    }
+                    $attributes[$type][$attribute] = ($type == 'standard_file') ?
+                        $response : '= decrypt("'.$this->crypt->encrypt($response).'")';
+                }
+            }
         }
 
-        if (!empty($attributes['secret'])) {
-            $this->writeOutAttributes('workspace.yml', $attributes['secret']);
+        array_filter($attributes);
+
+        foreach ($attributes as $attributesOfType) {
+            $this->writeOutAttributes('workspace.yml', $attributesOfType);
         }
     }
 
