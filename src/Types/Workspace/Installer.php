@@ -143,26 +143,30 @@ class Installer
 
         foreach (['standard', 'secret'] as $type) {
             foreach ($required[$type] ?? [] as $attribute) {
-                if (!isset($this->attributes[$attribute])) {
-                    $response = $this->terminal->ask($attribute);
-                    $attributes[$type][$attribute] = ($type == 'standard') ?
-                        $response : '= decrypt("'.$this->crypt->encrypt($response).'")';
+                if (isset($this->attributes[$attribute]) && $this->attributes[$attribute] !== null) {
+                    continue;
                 }
+
+                $response = $this->terminal->ask($attribute);
+                $attributes[$type][$attribute] = ($type == 'standard') ?
+                    $response : '= decrypt("'.$this->crypt->encrypt($response).'")';
             }
         }
 
         foreach (['standard_file', 'secret_file'] as $type) {
             foreach ($required[$type] ?? [] as $attribute) {
-                if (!isset($this->attributes[$attribute])) {
-                    $response = $this->terminal->ask('File path to read for ' . $attribute);
-                    if (file_exists($response) && is_readable($response) && is_file($response)) {
-                        $response = file_get_contents($response);
-                    } else {
-                        throw new Exception('Could not read file "' . $response . '"');
-                    }
-                    $attributes[$type][$attribute] = ($type == 'standard_file') ?
-                        $response : '= decrypt("'.$this->crypt->encrypt($response).'")';
+                if (isset($this->attributes[$attribute]) && $this->attributes[$attribute] !== null) {
+                    continue;
                 }
+
+                $response = $this->terminal->ask('File path to read for ' . $attribute);
+                if (file_exists($response) && is_readable($response) && is_file($response)) {
+                    $response = file_get_contents($response);
+                } else {
+                    throw new Exception('Could not read file "' . $response . '"');
+                }
+                $attributes[$type][$attribute] = ($type == 'standard_file') ?
+                    $response : '= decrypt("'.$this->crypt->encrypt($response).'")';
             }
         }
 
