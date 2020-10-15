@@ -61,4 +61,20 @@ EOD
             'MY127WS_KEY' => '81a7fa14a8ceb8e1c8860031e2bac03f4b939de44fa1a78987a3fcff1bf57100',
         ])->getOutput()));
     }
+
+    /** @test */
+    public function secret_files_can_encrypted_and_decrypted_given_a_key()
+    {
+        Fixture::workspace(<<<'EOD'
+key('default'): 81a7fa14a8ceb8e1c8860031e2bac03f4b939de44fa1a78987a3fcff1bf57100
+EOD
+        );
+
+        $contents = file_get_contents('workspace.yml');
+        $encrypted = trim(run('secret file encrypt "workspace.yml"'));
+        $decrypted = trim(run('secret decrypt "'.$encrypted.'"'));
+
+        $this->assertTrue($encrypted != $contents);
+        $this->assertTrue($decrypted == $contents);
+    }
 }

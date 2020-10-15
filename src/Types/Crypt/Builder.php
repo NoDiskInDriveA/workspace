@@ -68,6 +68,12 @@ class Builder implements EnvironmentBuilder
                     echo $this->crypt->encrypt($input->getArgument('message'), $input->getArgument('key') ?? 'default') . "\n";
                 });
 
+            $this->application->section('secret file encrypt')
+                ->usage('secret file encrypt <path_to_file> [<key>]')
+                ->action(function (Input $input) {
+                    echo $this->crypt->encrypt(file_get_contents($input->getArgument('path_to_file')), $input->getArgument('key') ?? 'default') . "\n";
+                });
+
             $this->application->section('secret decrypt')
                 ->usage('secret decrypt <encrypted>')
                 ->action(function (Input $input) {
