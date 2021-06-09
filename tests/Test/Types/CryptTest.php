@@ -65,14 +65,14 @@ EOD
     /** @test */
     public function secret_files_can_encrypted_and_decrypted_given_a_key()
     {
-        Fixture::workspace(<<<'EOD'
+        $this->createWorkspaceYml(<<<'EOD'
 key('default'): 81a7fa14a8ceb8e1c8860031e2bac03f4b939de44fa1a78987a3fcff1bf57100
 EOD
         );
 
-        $contents = file_get_contents('workspace.yml');
-        $encrypted = trim(run('secret encrypt-file "workspace.yml"'));
-        $decrypted = trim(run('secret decrypt "'.$encrypted.'"'));
+        $contents = $this->workspace()->getContents('workspace.yml');
+        $encrypted = trim($this->workspaceCommand('secret encrypt-file "workspace.yml"')->getOutput());
+        $decrypted = trim($this->workspaceCommand('secret decrypt "'.$encrypted.'"')->getOutput());
 
         $this->assertTrue($encrypted != $contents);
         $this->assertTrue($decrypted == $contents);
