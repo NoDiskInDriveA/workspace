@@ -72,7 +72,7 @@ EOD
 
         $contents = $this->workspace()->getContents('workspace.yml');
         $encrypted = trim($this->workspaceCommand('secret encrypt-file "workspace.yml"')->getOutput());
-        $decrypted = trim($this->workspaceCommand('secret decrypt "'.$encrypted.'"')->getOutput());
+        $decrypted = trim($this->workspaceCommand('secret decrypt "' . $encrypted . '"')->getOutput());
 
         $this->assertTrue($encrypted != $contents);
         $this->assertTrue($decrypted == $contents);
