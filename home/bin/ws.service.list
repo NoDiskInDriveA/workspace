@@ -1,0 +1,21 @@
+#!/bin/bash
+
+DIR=""
+
+main()
+{
+    find "${DIR}/service" -name 'init.sh' -depth 2 -print0 | while read -d $'\0' file
+    do
+        echo $(basename $(dirname $file))
+    done
+}
+
+bootstrap()
+{
+    DIR="$(cd "$(dirname "$0")" && cd ../ && pwd)"
+    # shellcheck source=../lib/sidekick.sh
+    source "$DIR/lib/sidekick.sh"
+}
+
+bootstrap
+main "$@"
