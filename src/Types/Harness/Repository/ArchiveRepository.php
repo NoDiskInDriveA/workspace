@@ -12,4 +12,9 @@ class ArchiveRepository implements Repository
             'url' => $package,
         ]);
     }
+
+    public function getPackagesData(): array
+    {
+        return [];
+    }
 }

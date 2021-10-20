@@ -56,6 +56,13 @@ class PackageRepository implements Repository
         ]);
     }
 
+    public function getPackagesData(): array
+    {
+        $this->importPackagesFromSources();
+
+        return $this->packages;
+    }
+
     private function hydrate(array $values): Package
     {
         $package = clone $this->prototype;

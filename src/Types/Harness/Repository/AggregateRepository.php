@@ -27,4 +27,9 @@ class AggregateRepository implements Repository
 
         return $this->archiveRepository->get($package);
     }
+
+    public function getPackagesData(): array
+    {
+        return $this->packageRepository->getPackagesData();
+    }
 }

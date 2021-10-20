@@ -14,6 +14,11 @@ command('create <name> [<harness> [--no-install] ]', 'create'): |
       $ws->passthru("cd $name; ws install");
   }
 
+command('harness list'):
+  exec: |
+    #!php(cwd:/)
+    $ws->listAvailable();
+
 attributes.default:
   global:
     service:

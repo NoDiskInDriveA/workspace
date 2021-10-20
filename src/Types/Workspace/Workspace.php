@@ -65,6 +65,22 @@ class Workspace extends Definition implements ArrayAccess
         $this->creator->create($name, $harness);
     }
 
+    public function listAvailable(): void
+    {
+        $summary = array_map(function($harness) {
+            return array_chunk(array_keys($harness), 8);
+        }, $this->packages->getPackagesData());
+
+        ksort($summary);
+
+        foreach ($summary as $name => $versionChunks) {
+            $this->terminal->write(sprintf("\n[%s]", $name));
+            foreach ($versionChunks as $versionChunk) {
+                $this->terminal->write(sprintf("    %s", join(', ', $versionChunk)));
+            }
+        }
+    }
+
     public function install(Input $input): void
     {
         $installer = new Installer(
