@@ -2,6 +2,8 @@
 
 namespace my127\Workspace\Updater;
 
+use Composer\Semver\Comparator;
+
 class Release
 {
     /** @var string */
@@ -33,6 +35,6 @@ class Release
      */
     public function isMoreRecentThan(string $version): bool
     {
-        return version_compare($this->getVersion(), $version, '>');
+        return Comparator::greaterThan($this->getVersion(), $version);
     }
 }

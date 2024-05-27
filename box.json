@@ -9,10 +9,12 @@
     "vendor/twig/twig/src"
   ],
   "files-bin": [
+    "home/buildinfo",
     "home/service/logger/.env",
     "home/service/mail/.env",
     "home/service/proxy/.env"
   ],
+  "git-commit-short": "build_git_commit_short",
   "metadata": "my127\\Workspace\\Application::getMetadata",
   "blacklist": [
     "tools/scripts/compile.sh",

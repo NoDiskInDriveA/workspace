@@ -4,6 +4,7 @@ namespace my127\Workspace\Updater;
 
 use my127\Workspace\Updater\Exception\NoUpdateAvailableException;
 use my127\Workspace\Updater\Exception\NoVersionDeterminedException;
+use my127\Workspace\Updater\Exception\UpdateNotAvailableOnDevBuildException;
 
 class Updater
 {
@@ -26,6 +27,9 @@ class Updater
     public function updateLatest(string $currentVersion, string $targetPath)
     {
         $latest = $this->getLatestRelease();
+        if (\str_starts_with($currentVersion, 'dev-')) {
+            throw new UpdateNotAvailableOnDevBuildException($latest->getVersion());
+        }
         if (!$latest->isMoreRecentThan($currentVersion)) {
             throw new NoUpdateAvailableException($currentVersion);
         }

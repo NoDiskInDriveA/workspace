@@ -9,10 +9,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Application extends ConsoleApplication
 {
-    private const DEFAULT_VERSION = '0.2.x-dev';
+    private const BUILD_COMMIT = '@build_git_commit_short@';
 
-    /** @var Environment */
-    private $environment;
+    private Environment $environment;
 
     public function __construct(Environment $environment, Executor $executor, EventDispatcher $dispatcher)
     {
@@ -30,12 +29,17 @@ class Application extends ConsoleApplication
 
     public static function getVersion(): string
     {
-        $version = trim(@file_get_contents(__DIR__ . '/../home/build'));
-        if (empty($version)) {
-            return self::DEFAULT_VERSION;
+        $version = \trim(@\file_get_contents(__DIR__ . '/../home/build') ?? '');
+        if (!empty($version)) {
+            return $version;
         }
 
-        return $version;
+        $devBranch = \trim(@\file_get_contents(__DIR__ . '/../home/buildinfo') ?? '');
+        if (!empty($devBranch)) {
+            return 'dev-' . $devBranch;
+        }
+
+        return 'dev-' . self::BUILD_COMMIT;
     }
 
     public static function getMetadata(): array
