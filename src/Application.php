@@ -9,6 +9,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Application extends ConsoleApplication
 {
+    private const DEFAULT_VERSION = '0.2.x-dev';
+
     /** @var Environment */
     private $environment;
 
@@ -30,15 +32,7 @@ class Application extends ConsoleApplication
     {
         $version = trim(@file_get_contents(__DIR__ . '/../home/build'));
         if (empty($version)) {
-            $timestamp = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
-                ->format(\DateTimeInterface::ATOM);
-            $base = trim(\shell_exec('2>/dev/null git symbolic-ref --short HEAD || git show --format="%%h" --no-patch') ?? '');
-
-            return \sprintf(
-                'Dev build at %s%s',
-                $timestamp,
-                $base ? \sprintf(' (base: %s)', $base) : ''
-            );
+            return self::DEFAULT_VERSION;
         }
 
         return $version;
